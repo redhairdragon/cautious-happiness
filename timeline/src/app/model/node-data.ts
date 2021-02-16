@@ -30,6 +30,9 @@ export class NodeData {
     public getRowsOfIter(iter: number) {
         return this.iteration_data[iter].getRows(this.rank);
     }
+    public getDurations(iter: number) {
+        return this.iteration_data[iter].getDurations();
+    }
 
 
 }

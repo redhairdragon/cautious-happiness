@@ -23,7 +23,7 @@ export class TimelineData {
 
     public get2Darray(iter: number) {
         if (iter == -1)
-            return [[]];
+            return [["0", "0", 0, 0]];
         let ranks = this.getNodes()
         let result = [];
         for (let r in ranks) {
@@ -32,6 +32,18 @@ export class TimelineData {
                 result.push(row);
         }
         return result;
+    }
+
+    public getPieArray(iter: number, rank: number) {
+        if (iter == -1)
+            return [["tmp", 1]];
+        let nodeData = this.node_data[rank];
+        let dict = nodeData.getDurations(iter)
+        let result = []
+        for (let op of Object.keys(dict).sort()) {
+            result.push([op, dict[op]])
+        }
+        return result
     }
 
 

@@ -17,17 +17,22 @@ import {
   styleUrls: ['./timeline-box.component.css']
 })
 export class TimelineBoxComponent implements OnInit {
-  @Input() iteration: number = 0;
+  @Input() iteration: number = -1;
   @Input() width: number = 15000;
   public data: TimelineData;
-  public chartType: ChartType = ChartType.Timeline;
-  public chartColumns: string[] = ["Node", "Operation", "Start", "End"];
-  public chartData: any = [["0", "0", 0, 0]];
+  public readonly timelineType: ChartType = ChartType.Timeline;
+  public readonly timelineColumns: string[] = ["Node", "Operation", "Start", "End"];
+  public readonly pieType: ChartType = ChartType.PieChart;
+  public readonly pieColumns: string[] = ["Task", "Duration"];
+  public timelineData: any = [["0", "0", 0, 0]];
+  public pieData: any = {};
+  public pieOption: any = {} //for color
   constructor(
     private dataStoreService: DataStoreService
   ) {
     this.data = this.dataStoreService.getData();
-    // this.chartData = this.data.get2Darray(this.iteration);
+    this.timelineData = this.data.get2Darray(this.iteration);
+    
   }
 
   ngOnInit(): void {
@@ -36,8 +41,8 @@ export class TimelineBoxComponent implements OnInit {
     return this.dataStoreService.isLoaded();
   }
   updateGraph(): void {
-    this.chartData = this.data.get2Darray(this.iteration);
-    console.log(this.chartData)
+    this.timelineData = this.data.get2Darray(this.iteration);
+    for (let r of this.data.getNodes())
+      this.pieData[r] = this.data.getPieArray(this.iteration, parseInt(r));
   }
-
 }

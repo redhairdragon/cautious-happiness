@@ -4,14 +4,23 @@
     <p> iterations: {{data.getIterationRange()}}</p>
     <label for="iteration">Iteration</label>
     <input id="iteration" type="number" [(ngModel)]="iteration" placeholder="0"
-        [min]="data.getIterationRange()[0]" [max]="data.getIterationRange()[1]">
-    <button (click)="updateGraph()">update</button>
+        [min]="data.getIterationRange()[0]" [max]="data.getIterationRange()[1]"
+        (change)="updateGraph()">
 
     <label for="width">Width</label>
     <input id="width" type="number" [(ngModel)]="width" placeholder="15000"
         min=0>
 
-    <google-chart [title]="'Iteration'  + iteration" [type]='chartType'
-        [data]="chartData" [columns]="chartColumns" [width]="width">
-    </google-chart>
+    <div>
+        <google-chart [title]="'Iteration'  + iteration" [type]='timelineType'
+            [data]="timelineData" [columns]="timelineColumns" [width]="width">
+        </google-chart>
+    </div>
+    <span *ngFor="let node of data.getNodes()">
+        <google-chart [title]="'rank'  + node" [type]='pieType'
+            [data]="pieData[node]" [columns]="pieColumns" [width]="800"
+            [height]="800">
+        </google-chart>
+    </span>
+
 </div>
