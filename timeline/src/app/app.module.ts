@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { TimelineBoxComponent } from './timeline-box/timeline-box.component';
 import { FileLoaderComponent } from './file-loader/file-loader.component';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,9 +18,12 @@ import { GoogleChartsModule } from 'angular-google-charts';
     FileLoaderComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
-    GoogleChartsModule
+    GoogleChartsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

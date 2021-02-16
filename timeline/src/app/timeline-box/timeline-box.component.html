@@ -1,1 +1,17 @@
-<p>timeline-box works!</p>
+<div *ngIf="dataLoaded()">
+
+    <p> nodes: {{data.getNodes()}}</p>
+    <p> iterations: {{data.getIterationRange()}}</p>
+    <label for="iteration">Iteration</label>
+    <input id="iteration" type="number" [(ngModel)]="iteration" placeholder="0"
+        [min]="data.getIterationRange()[0]" [max]="data.getIterationRange()[1]">
+    <button (click)="updateGraph()">update</button>
+
+    <label for="width">Width</label>
+    <input id="width" type="number" [(ngModel)]="width" placeholder="15000"
+        min=0>
+
+    <google-chart [title]="'Iteration'  + iteration" [type]='chartType'
+        [data]="chartData" [columns]="chartColumns" [width]="width">
+    </google-chart>
+</div>
