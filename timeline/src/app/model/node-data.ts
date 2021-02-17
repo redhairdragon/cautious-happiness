@@ -7,6 +7,7 @@ export class NodeData {
     public minIteration: number = Infinity;
     public maxIteration: number = -1;
 
+
     public constructor(record: any) {
         this.rank = record["global_rank"];
         this.micro_batch_size = record["micro_batch_size"];

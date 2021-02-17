@@ -3,6 +3,8 @@ import { NodeData } from "./node-data"
 export class TimelineData {
     public node_data: { [rank: number]: NodeData } = {};
     current_rank: number = -1;
+    public typeSet: Set<string> = new Set();
+
     public constructor() {
     }
 
@@ -40,8 +42,11 @@ export class TimelineData {
         let nodeData = this.node_data[rank];
         let dict = nodeData.getDurations(iter)
         let result = []
-        for (let op of Object.keys(dict).sort()) {
-            result.push([op, dict[op]])
+        for (let op of Array.from(this.typeSet).sort()) {
+            if (op in dict)
+                result.push([op, dict[op]])
+            else
+                result.push([op, 0])
         }
         return result
     }
@@ -52,8 +57,10 @@ export class TimelineData {
         if ("type" in record) {
             if (record["type"] === "META")
                 return this.handleMetaEntry(record);
-            else
+            else {
+                this.typeSet.add(record["type"])
                 return this.handleTimeEntry(record);
+            }
         }
         return "INVALID RECORD: type is not found";
     }
