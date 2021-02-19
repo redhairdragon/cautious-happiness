@@ -7,7 +7,6 @@ export class NodeData {
     public minIteration: number = Infinity;
     public maxIteration: number = -1;
 
-
     public constructor(record: any) {
         this.rank = record["global_rank"];
         this.micro_batch_size = record["micro_batch_size"];
@@ -18,10 +17,17 @@ export class NodeData {
         if ("iteration" in record) {
             this.maxIteration = Math.max(this.maxIteration, parseInt(record["iteration"]))
             this.minIteration = Math.min(this.minIteration, parseInt(record["iteration"]))
-
             let iter = record["iteration"];
             if (!(iter in this.iteration_data))
                 this.iteration_data[iter] = new IterationData(iter);
+            if (record["type"] === "Load Checkpoint") {
+                for (let it in this.iteration_data) {
+                    if (it >= record["iteration"])
+                        this.iteration_data[it].reCompute()
+                }
+                console.log(this.iteration_data)
+            }
+
             this.iteration_data[iter].addEntry(record);
         } else
             return "INVALID ENTRY: missing iteration " + record;

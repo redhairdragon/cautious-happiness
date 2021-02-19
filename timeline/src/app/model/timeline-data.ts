@@ -69,9 +69,9 @@ export class TimelineData {
     private handleMetaEntry(record: any): string {
         let error: string = "";
         this.current_rank = record["global_rank"];
-        if (this.current_rank in this.node_data)
-            return "INVALID RECORD: duplicated global_rank";
-        this.node_data[this.current_rank] = new NodeData(record);
+        if (!(this.current_rank in this.node_data))
+            this.node_data[this.current_rank] = new NodeData(record);
+
         return error;
     }
 

@@ -2,9 +2,17 @@ import { EntryData } from "./entry-data"
 export class IterationData {
     data: EntryData[] = [];
     iteration: number;
+    reComputed: boolean;
 
     constructor(iteration: number) {
         this.iteration = iteration;
+
+        this.reComputed = false;
+    }
+
+    public reCompute() {
+        this.data = []
+        this.reComputed = true;
     }
 
     public addEntry(entry: any) {
@@ -14,7 +22,7 @@ export class IterationData {
     public getRows(rank: number) {
         let result = [];
         for (let entry of this.data)
-            result.push(['Node ' + rank, entry.type, entry.start * 1000, entry.end * 1000])
+            result.push(['Node ' + rank, entry.type, (entry.start) * 1000, (entry.end) * 1000])
         return result;
     }
 

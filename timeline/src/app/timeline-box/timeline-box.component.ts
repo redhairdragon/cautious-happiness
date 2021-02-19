@@ -32,14 +32,15 @@ export class TimelineBoxComponent implements OnInit {
   ) {
     this.data = this.dataStoreService.getData();
     this.timelineData = this.data.get2Darray(this.iteration);
-    
   }
 
   ngOnInit(): void {
   }
+
   dataLoaded(): boolean {
     return this.dataStoreService.isLoaded();
   }
+
   updateGraph(): void {
     this.timelineData = this.data.get2Darray(this.iteration);
     for (let r of this.data.getNodes())
