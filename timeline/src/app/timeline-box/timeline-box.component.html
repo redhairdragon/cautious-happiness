@@ -1,8 +1,15 @@
 <div *ngIf="dataLoaded()">
-
     <p> nodes: {{data.getNodes()}}</p>
-    <p> iterations: {{data.getIterationRange()}}</p>
-    <label for="iteration">Iteration</label>
+    <p> Recorded Iteration Range: {{data.getIterationRange()}}</p>
+    <h3>
+        <label for="to-iteration"> Time to Iteration </label>
+        <input id="to-iteration" type="number" [(ngModel)]="toIteration"
+            placeholder="0" [min]="data.getIterationRange()[0]"
+            [max]="data.getIterationRange()[1]">
+        : {{data.timeToIteration(toIteration)/60}} min
+    </h3>
+
+    <label for="iteration"> Iteration </label>
     <input id="iteration" type="number" [(ngModel)]="iteration" placeholder="0"
         [min]="data.getIterationRange()[0]" [max]="data.getIterationRange()[1]"
         (change)="updateGraph()">
@@ -10,16 +17,24 @@
     <label for="width">Width</label>
     <input id="width" type="number" [(ngModel)]="width" placeholder="15000"
         min=0>
+    <h3> Total Number of Failure: {{data.numberOfRestart()}}</h3>
+    <h3> Iteration time: {{data.getIterationTimeInSecond(iteration)}} seconds
+    </h3>
+    <h3> IsReComputed: {{data.isRecomputed(iteration)}}</h3>
+    <h3> SaveCheckpoint Overhead: {{data.saveOverhead(iteration)}} seconds</h3>
+    <h3> LoadCheckpoint Overhead: {{data.loadOverhead(iteration)}} seconds</h3>
+    <!-- <button (click)="data.test()">test</button> -->
 
     <div>
         <google-chart [title]="'Iteration'  + iteration" [type]='timelineType'
-            [data]="timelineData" [columns]="timelineColumns" [width]="width">
+            [data]="timelineData" [columns]="timelineColumns" [width]="width"
+            [height]="800">
         </google-chart>
     </div>
     <span *ngFor="let node of data.getNodes()">
         <google-chart [title]="'rank'  + node" [type]='pieType'
             [data]="pieData[node]" [columns]="pieColumns" [width]="800"
-            [height]="800">
+            [height]="800" style="display: inline-block;">
         </google-chart>
     </span>
 

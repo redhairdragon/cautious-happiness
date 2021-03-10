@@ -6,6 +6,7 @@ export class NodeData {
 
     public minIteration: number = Infinity;
     public maxIteration: number = -1;
+    public restart = 0;
 
     public constructor(record: any) {
         this.rank = record["global_rank"];
@@ -13,22 +14,23 @@ export class NodeData {
         this.iteration_data = {};
     }
 
-    public parseTimeEntry(record: any): string {
+    public parseTimeEntry(record: any, next: any): string {
         if ("iteration" in record) {
-            this.maxIteration = Math.max(this.maxIteration, parseInt(record["iteration"]))
-            this.minIteration = Math.min(this.minIteration, parseInt(record["iteration"]))
-            let iter = record["iteration"];
-            if (!(iter in this.iteration_data))
-                this.iteration_data[iter] = new IterationData(iter);
             if (record["type"] === "Load Checkpoint") {
+                this.restart += 1;
+                record["iteration"] = next["iteration"]
                 for (let it in this.iteration_data) {
                     if (it >= record["iteration"])
                         this.iteration_data[it].reCompute()
                 }
-                console.log(this.iteration_data)
             }
+            let iter = record["iteration"];
+            if (!(iter in this.iteration_data))
+                this.iteration_data[iter] = new IterationData(iter);
 
             this.iteration_data[iter].addEntry(record);
+            this.maxIteration = Math.max(this.maxIteration, parseInt(record["iteration"]))
+            this.minIteration = Math.min(this.minIteration, parseInt(record["iteration"]))
         } else
             return "INVALID ENTRY: missing iteration " + record;
         return "";
@@ -41,5 +43,14 @@ export class NodeData {
         return this.iteration_data[iter].getDurations();
     }
 
+    public getIterationTimeInSecond(iter: number) {
+        return this.iteration_data[iter].getIterationTimeInSecond();
+    }
 
+    public hasSaveCheckpoint(iter: number) {
+        return this.iteration_data[iter].hasSaveCheckpoint
+    }
+    public hasLoadCheckpoint(iter: number) {
+        return this.iteration_data[iter].hasLoadCheckpoint
+    }
 }

@@ -37,8 +37,16 @@ export class FileLoaderComponent implements OnInit {
 
   processRawLog(raw: string): string {
     const records = raw.split('\n');
+    let error = "";
     for (let i = 0; i < records.length - 1; ++i) {
-      let error = this.data.parseRecord(JSON.parse(records[i]));
+      let curr = JSON.parse(records[i]);
+      if (i < records.length - 2) {
+        let next = JSON.parse(records[i + 1]);
+        this.data.parseRecord(curr, next);
+      }
+      else
+        this.data.parseRecord(curr, null);
+
       if (error !== "")
         return error;
     }

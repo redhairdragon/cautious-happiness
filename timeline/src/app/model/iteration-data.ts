@@ -4,18 +4,38 @@ export class IterationData {
     iteration: number;
     reComputed: boolean;
 
+    hasSaveCheckpoint: boolean = false;
+    hasLoadCheckpoint: boolean = false;
+    public loadCheckpointIdx: number = -1;
+    public saveCheckpointIdx: number = -1;
+
+    public minTimestamp: number = Infinity;
+    public maxTimestamp: number = -1;
+
     constructor(iteration: number) {
         this.iteration = iteration;
-
         this.reComputed = false;
     }
 
     public reCompute() {
         this.data = []
         this.reComputed = true;
+        this.hasSaveCheckpoint = false;
     }
 
     public addEntry(entry: any) {
+        this.minTimestamp = Math.min(this.minTimestamp, entry["start"])
+        this.maxTimestamp = Math.max(this.maxTimestamp, entry["end"])
+        if (entry["type"] === "Save Checkpoint") {
+            this.saveCheckpointIdx = this.data.length;
+            this.hasSaveCheckpoint = true;
+        }
+        if (entry["type"] === "Load Checkpoint") {
+            console.log(entry)
+            this.loadCheckpointIdx = this.data.length;
+            this.hasLoadCheckpoint = true;
+        }
+
         this.data.push(new EntryData(entry["type"], entry["start"], entry["end"]));
     }
 
@@ -37,4 +57,7 @@ export class IterationData {
         return result;
     }
 
+    public getIterationTimeInSecond() {
+        return this.maxTimestamp - this.minTimestamp;
+    }
 }

@@ -19,6 +19,8 @@ import {
 export class TimelineBoxComponent implements OnInit {
   @Input() iteration: number = -1;
   @Input() width: number = 15000;
+  @Input() toIteration: number = 0;
+
   public data: TimelineData;
   public readonly timelineType: ChartType = ChartType.Timeline;
   public readonly timelineColumns: string[] = ["Node", "Operation", "Start", "End"];
